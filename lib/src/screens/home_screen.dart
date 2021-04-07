@@ -2,7 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:stt_flutter/src/components/record_card.dart';
+import 'package:stt_flutter/src/components/home/home_bottom_component.dart';
+import 'package:stt_flutter/src/components/home/home_records_list_component.dart';
 import 'package:stt_flutter/src/models/record.dart';
 import 'package:stt_flutter/src/services/records_service.dart';
 
@@ -40,15 +41,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _addRecord() async {
     RecordService recordService = await RecordService.instance.recordService;
     DateTime now = DateTime.now();
-    Record tempRecord = Record(
+    recordService.saveRecord(Record(
       path: 'No path',
       title: 'Created at $now',
       text: 'Text for $now',
       creationDate: 'now',
       duration: 1,
-    );
-    log('Adding record ${tempRecord.title}');
-    recordService.saveRecord(tempRecord);
+    ));
     _fetchRecords();
   }
 
@@ -59,35 +58,13 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Expanded(
           flex: 5,
-          child: Container(
-            child: ListView.builder(
-                itemCount: _records.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return RecordCard(
-                    record: _records[index],
-                  );
-                }),
-          ),
+          child: HomeRecordsList(records: _records),
         ),
         Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                child: RawMaterialButton(
-                  onPressed: _addRecord,
-                  shape: CircleBorder(),
-                  child: Icon(
-                    Icons.add,
-                    color: Colors.white,
-                    size: 48.0,
-                  ),
-                  fillColor: Colors.teal,
-                  constraints:
-                      BoxConstraints.tightFor(width: 76.0, height: 76.0),
-                ),
-              ),
-            ],
+          child: HomeBottom(
+            onPressed: () {
+              _addRecord();
+            },
           ),
         ),
       ],
