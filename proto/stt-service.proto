@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package galamat.api.stt.v1;
+
+option java_multiple_files = true;
+option java_package = "galamat.api.stt.v1";
+
+service sttService {
+  rpc StreamRecognize (stream StreamingRecognitionRequest) returns (stream SpeechRecognitionResponseChunk) {}
+}
+
+message StreamingRecognitionRequest {
+  bytes audio_content = 1;
+  bool get_result = 2;
+}
+
+message SpeechRecognitionResponseChunk {
+  SpeechRecognitionAlternative alternatives = 1;
+  // This flag shows that the received chunk contains a part of the recognized text that won't be changed.
+  bool final = 2;
+  // This flag shows that the received chunk is the end of an utterance.
+  bool end_of_utterance = 3;
+}
+
+message SpeechRecognitionAlternative {
+  string text = 1;
+  float confidence = 2;
+}
