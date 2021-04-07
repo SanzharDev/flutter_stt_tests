@@ -5,11 +5,28 @@ import 'package:flutter/widgets.dart';
 import 'package:stt_flutter/src/models/record.dart';
 import 'package:stt_flutter/src/utilities/constants.dart';
 
-class RecordCard extends StatelessWidget {
+class RecordCard extends StatefulWidget {
   final Record record;
   RecordCard({
     this.record,
   });
+  @override
+  _RecordCardState createState() => _RecordCardState();
+}
+
+class _RecordCardState extends State<RecordCard> {
+  bool _isEditingTitle = false;
+  String _title;
+
+  @override
+  void initState() {
+    setState(() {
+      _isEditingTitle = false;
+      _title = widget.record.title;
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,12 +39,31 @@ class RecordCard extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: Text(record.text),
+                  child: (!_isEditingTitle
+                      ? Text(_title)
+                      : TextField(
+                          onChanged: (text) {
+                            log('$text');
+                          },
+                          onSubmitted: (text) {
+                            setState(() {
+                              _title = text;
+                              _isEditingTitle = false;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            labelText: _title,
+                          ),
+                        )),
                 ),
                 Expanded(
                   child: GestureDetector(
                     child: RawMaterialButton(
-                      onPressed: () => log('pressed edit'),
+                      onPressed: () {
+                        setState(() {
+                          _isEditingTitle = !_isEditingTitle;
+                        });
+                      },
                       child: Icon(
                         Icons.edit,
                         size: 28.0,

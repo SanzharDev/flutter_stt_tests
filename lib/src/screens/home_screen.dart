@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:stt_flutter/src/components/home/home_bottom_component.dart';
@@ -17,7 +15,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _fetchRecords();
     super.initState();
   }
 
@@ -25,17 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _records = null;
     super.dispose();
-  }
-
-  Future<void> _fetchRecords() async {
-    RecordService recordService = await RecordService.instance.recordService;
-    List<Record> records = await recordService.records();
-    setState(() {
-      _records = records;
-    });
-    for (Record r in _records) {
-      log('$r');
-    }
   }
 
   Future<void> _addRecord() async {
@@ -48,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
       creationDate: 'now',
       duration: 1,
     ));
-    _fetchRecords();
   }
 
   @override
@@ -58,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Expanded(
           flex: 5,
-          child: HomeRecordsList(records: _records),
+          child: HomeRecordsList(),
         ),
         Expanded(
           child: HomeBottom(
