@@ -15,6 +15,17 @@ class Record {
     this.duration,
   });
 
+  Record titleUpdatedClone(String newTitle) {
+    return Record(
+      id: this.id,
+      path: this.path,
+      title: newTitle,
+      text: this.text,
+      creationDate: this.creationDate,
+      duration: this.duration,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,

@@ -38,6 +38,7 @@ class _HomeRecordsListState extends State<HomeRecordsList> {
           itemBuilder: (BuildContext context, int index) {
             return RecordCard(
               record: _records[index],
+              refreshList: _fetchRecords,
             );
           }),
     );
