@@ -49,4 +49,12 @@ class RecordService {
       whereArgs: [record.id],
     );
   }
+
+  Future<void> deleteRecord(Record record) async {
+    await _database.delete(
+      'records',
+      where: "id = ?",
+      whereArgs: [record.id],
+    );
+  }
 }

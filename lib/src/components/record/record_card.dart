@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:stt_flutter/src/components/record/record_card_dropdown_menu.dart';
 import 'package:stt_flutter/src/models/record.dart';
 import 'package:stt_flutter/src/services/records_service.dart';
 import 'package:stt_flutter/src/utilities/constants.dart';
@@ -26,6 +27,14 @@ class _RecordCardState extends State<RecordCard> {
     Record updatedTitleRecord = widget.record.titleUpdatedClone(title);
     log('Updated record: ${updatedTitleRecord.toMap()}');
     await recordService.updateRecord(updatedTitleRecord);
+    widget.refreshList();
+  }
+
+  void _reverseIsEditingTitleState() {
+    setState(() {
+      _isEditingTitle = !_isEditingTitle;
+    });
+    log('changed state');
   }
 
   @override
@@ -50,7 +59,10 @@ class _RecordCardState extends State<RecordCard> {
               children: [
                 Expanded(
                   child: (!_isEditingTitle
-                      ? Text(_title)
+                      ? Text(
+                          _title,
+                          style: kRecordTitleCardTextStyle,
+                        )
                       : TextField(
                           onChanged: (text) {
                             log('$text');
@@ -60,7 +72,6 @@ class _RecordCardState extends State<RecordCard> {
                               _title = text;
                               _isEditingTitle = false;
                               updateRecordTitle(_title);
-                              widget.refreshList;
                             });
                           },
                           decoration: InputDecoration(
@@ -69,19 +80,8 @@ class _RecordCardState extends State<RecordCard> {
                         )),
                 ),
                 Expanded(
-                  child: GestureDetector(
-                    child: RawMaterialButton(
-                      onPressed: () {
-                        setState(() {
-                          _isEditingTitle = !_isEditingTitle;
-                        });
-                      },
-                      child: Icon(
-                        Icons.edit,
-                        size: 28.0,
-                      ),
-                      shape: CircleBorder(),
-                    ),
+                  child: RecordCardDropdownMenu(
+                    changeEditingState: _reverseIsEditingTitleState,
                   ),
                 ),
               ],

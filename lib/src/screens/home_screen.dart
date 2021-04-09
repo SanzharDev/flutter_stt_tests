@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:stt_flutter/src/components/home/home_bottom_component.dart';
@@ -13,8 +15,20 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<Record> _records = List.empty();
 
+  Future<void> _fetchRecords() async {
+    RecordService recordService = await RecordService.instance.recordService;
+    List<Record> records = await recordService.records();
+    setState(() {
+      _records = records;
+    });
+    for (Record r in _records) {
+      log('$r');
+    }
+  }
+
   @override
   void initState() {
+    _fetchRecords();
     super.initState();
   }
 
@@ -24,18 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  Future<void> _addRecord() async {
-    RecordService recordService = await RecordService.instance.recordService;
-    DateTime now = DateTime.now();
-    recordService.saveRecord(Record(
-      path: 'No path',
-      title: 'Created at $now',
-      text: 'Text for $now',
-      creationDate: 'now',
-      duration: 1,
-    ));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -43,13 +45,14 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Expanded(
           flex: 5,
-          child: HomeRecordsList(),
+          child: HomeRecordsList(
+            records: _records,
+            refreshList: _fetchRecords,
+          ),
         ),
         Expanded(
           child: HomeBottom(
-            onPressed: () {
-              _addRecord();
-            },
+            refreshList: _fetchRecords,
           ),
         ),
       ],
