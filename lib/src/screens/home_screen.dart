@@ -24,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
     for (Record r in _records) {
       log('$r');
     }
+    log('-------------------------------------');
   }
 
   @override

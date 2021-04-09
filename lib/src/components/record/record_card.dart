@@ -30,6 +30,12 @@ class _RecordCardState extends State<RecordCard> {
     widget.refreshList();
   }
 
+  Future<void> deleteRecord() async {
+    RecordService recordService = await RecordService.instance.recordService;
+    await recordService.deleteRecord(widget.record);
+    widget.refreshList();
+  }
+
   void _reverseIsEditingTitleState() {
     setState(() {
       _isEditingTitle = !_isEditingTitle;
@@ -82,6 +88,7 @@ class _RecordCardState extends State<RecordCard> {
                 Expanded(
                   child: RecordCardDropdownMenu(
                     changeEditingState: _reverseIsEditingTitleState,
+                    deleteRecord: deleteRecord,
                   ),
                 ),
               ],
