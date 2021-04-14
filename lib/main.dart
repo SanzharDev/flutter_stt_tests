@@ -1,25 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:stt_flutter/src/screens/home_screen.dart';
+import 'package:provider/provider.dart';
+import 'package:stt_flutter/src/providers/records_provider.dart';
+import 'package:stt_flutter/src/screens/stateless_home_screen.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('TEST'),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: RecordsProvider(),
         ),
-        body: HomeScreen(),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        home: Scaffold(
+          appBar: AppBar(
+            title: Text('TEST'),
+          ),
+          body: StatelessHomeScreen(),
+        ),
       ),
     );
   }

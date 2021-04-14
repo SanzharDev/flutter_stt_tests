@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:stt_flutter/src/components/record/record_card_dropdown_menu.dart';
 import 'package:stt_flutter/src/models/record.dart';
+import 'package:stt_flutter/src/providers/records_provider.dart';
 import 'package:stt_flutter/src/services/records_service.dart';
 import 'package:stt_flutter/src/utilities/constants.dart';
 
@@ -30,17 +32,16 @@ class _RecordCardState extends State<RecordCard> {
     widget.refreshList();
   }
 
-  Future<void> deleteRecord() async {
-    RecordService recordService = await RecordService.instance.recordService;
-    await recordService.deleteRecord(widget.record);
-    widget.refreshList();
-  }
-
   void _reverseIsEditingTitleState() {
     setState(() {
       _isEditingTitle = !_isEditingTitle;
     });
     log('changed state');
+  }
+
+  void removeRecord(BuildContext context) {
+    Provider.of<RecordsProvider>(context, listen: true)
+        .removeRecord(widget.record);
   }
 
   @override
@@ -53,6 +54,11 @@ class _RecordCardState extends State<RecordCard> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       height: 100.0,
@@ -62,12 +68,16 @@ class _RecordCardState extends State<RecordCard> {
         children: [
           Expanded(
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
                   child: (!_isEditingTitle
-                      ? Text(
-                          _title,
-                          style: kRecordTitleCardTextStyle,
+                      ? Padding(
+                          padding: EdgeInsets.only(left: 25.0),
+                          child: Text(
+                            _title,
+                            style: kRecordTitleCardTextStyle,
+                          ),
                         )
                       : TextField(
                           onChanged: (text) {
@@ -88,7 +98,7 @@ class _RecordCardState extends State<RecordCard> {
                 Expanded(
                   child: RecordCardDropdownMenu(
                     changeEditingState: _reverseIsEditingTitleState,
-                    deleteRecord: deleteRecord,
+                    removeRecord: removeRecord,
                   ),
                 ),
               ],
@@ -96,7 +106,7 @@ class _RecordCardState extends State<RecordCard> {
           ),
           Expanded(
             child: Container(
-              child: Text('Other functional staff'),
+              child: Text('Other staff'),
             ),
           ),
         ],

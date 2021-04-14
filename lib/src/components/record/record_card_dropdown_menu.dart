@@ -5,13 +5,13 @@ import 'package:flutter/widgets.dart';
 
 class RecordCardDropdownMenu extends StatelessWidget {
   final Function _changeEditingState;
-  final Function _deleteRecord;
+  final Function _removeRecord;
 
   RecordCardDropdownMenu({
     Function changeEditingState,
-    Function deleteRecord,
-  })  : _changeEditingState = changeEditingState,
-        _deleteRecord = deleteRecord;
+    Function removeRecord,
+  })  : this._changeEditingState = changeEditingState,
+        this._removeRecord = removeRecord;
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,9 @@ class RecordCardDropdownMenu extends StatelessWidget {
         ),
         PopupMenuItem(
           child: ListTile(
-            onTap: _deleteRecord,
+            onTap: () {
+              _removeRecord(context);
+            },
             leading: RawMaterialButton(
               onPressed: () => log('Record delete pressed'),
               child: Icon(
