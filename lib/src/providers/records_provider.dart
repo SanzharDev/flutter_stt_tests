@@ -24,6 +24,14 @@ class RecordsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> addRecordDefault() async {
+    RecordService recordService = await RecordService.instance.recordService;
+    Record newRecord = Record.defaultObject();
+    _records.add(newRecord);
+    recordService.saveRecord(newRecord);
+    notifyListeners();
+  }
+
   Future<void> removeRecord(Record record) async {
     RecordService recordService = await RecordService.instance.recordService;
     recordService.deleteRecord(record);

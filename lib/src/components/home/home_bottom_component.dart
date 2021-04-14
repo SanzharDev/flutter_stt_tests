@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:stt_flutter/src/models/record.dart';
+import 'package:stt_flutter/src/providers/records_provider.dart';
 import 'package:stt_flutter/src/services/records_service.dart';
 
 class HomeBottom extends StatelessWidget {
@@ -21,6 +23,18 @@ class HomeBottom extends StatelessWidget {
     refreshList();
   }
 
+  void _addRecordWithProvider(BuildContext context) {
+    DateTime now = DateTime.now();
+    Record record = Record(
+      path: 'No path',
+      title: 'Created at $now',
+      text: 'Text for $now',
+      creationDate: 'now',
+      duration: 1,
+    );
+    Provider.of<RecordsProvider>(context, listen: false).addRecord(record);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -28,7 +42,9 @@ class HomeBottom extends StatelessWidget {
       children: [
         GestureDetector(
           child: RawMaterialButton(
-            onPressed: _addRecord,
+            onPressed: () {
+              _addRecordWithProvider(context);
+            },
             shape: CircleBorder(),
             child: Icon(
               Icons.add,

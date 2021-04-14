@@ -26,6 +26,17 @@ class Record {
     );
   }
 
+  static Record defaultObject() {
+    DateTime now = DateTime.now();
+    return Record(
+      path: 'No path',
+      title: 'Created at $now',
+      text: 'Text for $now',
+      creationDate: 'now',
+      duration: 1,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,

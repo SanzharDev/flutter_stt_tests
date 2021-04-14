@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:stt_flutter/src/components/home/home_bottom_component.dart';
-import 'package:stt_flutter/src/components/home/records_list.dart';
+import 'package:stt_flutter/src/components/home/stateless_records_list.dart';
 import 'package:stt_flutter/src/models/record.dart';
 import 'package:stt_flutter/src/providers/records_provider.dart';
 
@@ -44,9 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Expanded(
           flex: 5,
-          child: RecordsList(
-            records: _records,
-          ),
+          child: StatelessRecordsList(),
         ),
         Expanded(
           child: HomeBottom(
