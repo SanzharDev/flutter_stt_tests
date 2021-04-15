@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stt_flutter/src/components/record/stateless_record_card_dropdown_menu.dart';
@@ -45,9 +43,6 @@ class StatelessRecordCard extends StatelessWidget {
                               ),
                             )
                           : TextField(
-                              onChanged: (text) {
-                                log('$text');
-                              },
                               onSubmitted: (text) {
                                 _updateTitle(context, text);
                                 recordCardProvider.changeEditingTitle(false);

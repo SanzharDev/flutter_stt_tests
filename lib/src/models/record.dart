@@ -40,6 +40,7 @@ class Record {
   static Record copyUpdatedId(Record record, int id) {
     return Record(
       id: id,
+      path: record.path,
       title: record.title,
       text: record.text,
       creationDate: record.creationDate,

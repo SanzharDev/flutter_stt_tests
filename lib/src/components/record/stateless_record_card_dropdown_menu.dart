@@ -36,7 +36,7 @@ class StatelessRecordCardDropdown extends StatelessWidget {
   }
 
   _copyText(BuildContext context) {
-    log('copying text of record{${_record.id}}');
+    log('copying text of record{$_record}');
   }
 
   _deleteRecord(BuildContext context) {
