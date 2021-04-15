@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stt_flutter/src/components/record/record_card.dart';
+import 'package:stt_flutter/src/components/record/stateless_record_card.dart';
 import 'package:stt_flutter/src/models/record.dart';
+import 'package:stt_flutter/src/providers/record_card_provider.dart';
 import 'package:stt_flutter/src/providers/records_provider.dart';
 
 class StatelessRecordsList extends StatelessWidget {
@@ -14,8 +15,11 @@ class StatelessRecordsList extends StatelessWidget {
           child: ListView.builder(
               itemCount: _records != null ? _records.length : 0,
               itemBuilder: (BuildContext context, int index) {
-                return RecordCard(
-                  record: _records[index],
+                return ChangeNotifierProvider(
+                  create: (context) => RecordCardProvider(),
+                  child: StatelessRecordCard(
+                    record: _records[index],
+                  ),
                 );
               }),
         );

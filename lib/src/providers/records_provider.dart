@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:stt_flutter/src/models/record.dart';
 import 'package:stt_flutter/src/services/records_service.dart';
@@ -19,30 +21,38 @@ class RecordsProvider extends ChangeNotifier {
 
   Future<void> addRecord(Record record) async {
     RecordService recordService = await RecordService.instance.recordService;
-    recordService.saveRecord(record);
-    _records.add(record);
+    int id = await recordService.saveRecord(record);
+    Record recordWithId = Record.copyUpdatedId(record, id);
+    _records.add(recordWithId);
+    log('added record $recordWithId');
     notifyListeners();
   }
 
   Future<void> addRecordDefault() async {
     RecordService recordService = await RecordService.instance.recordService;
-    Record newRecord = Record.defaultObject();
-    _records.add(newRecord);
-    recordService.saveRecord(newRecord);
+    Record record = Record.defaultObject();
+    int id = await recordService.saveRecord(record);
+    Record recordWithId = Record.copyUpdatedId(record, id);
+    _records.add(recordWithId);
     notifyListeners();
   }
 
   Future<void> removeRecord(Record record) async {
     RecordService recordService = await RecordService.instance.recordService;
     recordService.deleteRecord(record);
-    // if it won't work, then try to override == in Record class
-    _records.remove(record);
+    if (_records.isNotEmpty) {
+      _records.remove(record);
+    }
     notifyListeners();
   }
 
-  Future<void> updateRecordTitle(Record record) async {
+  Future<void> updateRecord(Record record) async {
     RecordService recordService = await RecordService.instance.recordService;
     await recordService.updateRecord(record);
+    int index = _records
+        .indexOf(_records.firstWhere((element) => element.id == record.id));
+    _records.insert(index, record);
+    _records.removeAt(index + 1);
     notifyListeners();
   }
 }

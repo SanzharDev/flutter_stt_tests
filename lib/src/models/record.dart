@@ -37,6 +37,16 @@ class Record {
     );
   }
 
+  static Record copyUpdatedId(Record record, int id) {
+    return Record(
+      id: id,
+      title: record.title,
+      text: record.text,
+      creationDate: record.creationDate,
+      duration: record.duration,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -52,5 +62,13 @@ class Record {
   String toString() {
     return 'Record {id: $id, path: $path, title: $title, '
         'text: $text, creation_date: $creationDate, duration: $duration}';
+  }
+
+  @override
+  int get hashCode => id;
+
+  @override
+  bool operator ==(Object other) {
+    return this.hashCode == other.hashCode;
   }
 }

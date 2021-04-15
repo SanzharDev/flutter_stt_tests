@@ -21,7 +21,7 @@ class StatelessHomeBottom extends StatelessWidget {
               color: Colors.white,
               size: 48.0,
             ),
-            fillColor: Colors.teal,
+            fillColor: Colors.blue,
             constraints: BoxConstraints.tightFor(width: 76.0, height: 76.0),
           ),
         ),
