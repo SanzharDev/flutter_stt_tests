@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stt_flutter/src/components/record/stateless_record_card.dart';
+import 'package:stt_flutter/src/components/record/record_card.dart';
 import 'package:stt_flutter/src/models/record.dart';
 import 'package:stt_flutter/src/providers/record_card_provider.dart';
 import 'package:stt_flutter/src/providers/records_provider.dart';

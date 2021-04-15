@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stt_flutter/src/screens/stateless_home_screen.dart';
+import 'package:stt_flutter/src/screens/home_screen.dart';
 
 void main() {
   runApp(MyApp());
