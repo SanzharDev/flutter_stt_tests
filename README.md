@@ -1,6 +1,6 @@
 # stt_copy_for_test
 
-A new Flutter application.
+Practicing flutter's Provider architecture.
 
 ## Getting Started
 
