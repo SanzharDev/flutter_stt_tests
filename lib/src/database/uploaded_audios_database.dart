@@ -1,27 +1,25 @@
 import 'dart:io';
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-class DatabaseInitializer {
-  static final _databaseName = 'SttRecords.db';
+class UploadedAudiosDatabase {
+  static final _databaseName = 'UploadedAudios.db';
   static final _databaseVersion = 1;
 
-  static final table = 'records';
+  static final table = 'uploads';
 
   static final columnId = 'id';
   static final columnPath = 'path';
-  static final columnTitle = 'title';
+  static final columnAudioId = 'audio_id';
   static final columnText = 'text';
-  static final columnCreationDate = 'creation_date';
   static final columnDuration = 'duration';
 
-  // make this a singleton class
-  DatabaseInitializer._privateConstructor();
-  static final DatabaseInitializer instance =
-      DatabaseInitializer._privateConstructor();
+  UploadedAudiosDatabase._privateConstructor();
+  static final UploadedAudiosDatabase instance =
+      UploadedAudiosDatabase._privateConstructor();
 
   static Database _database;
   Future<Database> get database async {
@@ -32,23 +30,20 @@ class DatabaseInitializer {
   }
 
   Future<Database> _initDatabase() async {
-    // Avoid errors caused by flutter upgrade
     WidgetsFlutterBinding.ensureInitialized();
-    // open database and store the reference.
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, _databaseName);
     return await openDatabase(path,
         version: _databaseVersion, onCreate: _onCreate);
   }
 
-  Future _onCreate(Database db, int version) async {
+  Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
           CREATE TABLE $table (
             $columnId integer primary key, 
             $columnPath text not null,
-            $columnTitle text not null,
+            $columnAudioId text not null,
             $columnText text not null, 
-            $columnCreationDate text not null,
             $columnDuration integer not null
           )
        ''');

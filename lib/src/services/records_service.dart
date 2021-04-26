@@ -1,5 +1,5 @@
 import 'package:sqflite/sqflite.dart';
-import 'package:stt_flutter/src/database/database_initializer.dart';
+import 'package:stt_flutter/src/database/records_database.dart';
 import 'package:stt_flutter/src/models/record.dart';
 
 class RecordService {
@@ -16,14 +16,14 @@ class RecordService {
   }
 
   Future<RecordService> _initRecordService() async {
-    _database = await DatabaseInitializer.instance.database;
+    _database = await RecordsDatabase.instance.database;
     return new RecordService._privateConstructor();
   }
 
   Future<int> saveRecord(Record record) async {
     // if the same data is inserted to table, then ConflictAlgorithm.replace,
     // allows to replace old data with new one coming.
-    return await _database.insert(DatabaseInitializer.table, record.toMap(),
+    return await _database.insert(RecordsDatabase.table, record.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
