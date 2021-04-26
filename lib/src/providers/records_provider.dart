@@ -6,9 +6,10 @@ import 'package:stt_flutter/src/services/records_service.dart';
 
 class RecordsProvider extends ChangeNotifier {
   final List<Record> _records = [];
+  bool _isToBeUpdated = true;
 
   List<Record> get records {
-    if (_records.isEmpty) _getRecordsFromDB();
+    if (_isToBeUpdated) _getRecordsFromDB();
     return _records;
   }
 
@@ -16,6 +17,7 @@ class RecordsProvider extends ChangeNotifier {
     RecordService recordService = await RecordService.instance.recordService;
     List<Record> records = await recordService.records();
     _records.addAll(records);
+    _isToBeUpdated = false;
     notifyListeners();
   }
 
