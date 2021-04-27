@@ -5,21 +5,22 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-class UploadedAudiosDatabase {
+class UploadedRecordsDatabase {
   static final _databaseName = 'UploadedAudios.db';
   static final _databaseVersion = 1;
 
   static final table = 'uploads';
 
   static final columnId = 'id';
-  static final columnPath = 'path';
   static final columnAudioId = 'audio_id';
+  static final columnStatus = 'status';
   static final columnText = 'text';
   static final columnDuration = 'duration';
+  static final columnPath = 'path';
 
-  UploadedAudiosDatabase._privateConstructor();
-  static final UploadedAudiosDatabase instance =
-      UploadedAudiosDatabase._privateConstructor();
+  UploadedRecordsDatabase._privateConstructor();
+  static final UploadedRecordsDatabase instance =
+      UploadedRecordsDatabase._privateConstructor();
 
   static Database _database;
   Future<Database> get database async {
@@ -41,10 +42,11 @@ class UploadedAudiosDatabase {
     await db.execute('''
           CREATE TABLE $table (
             $columnId integer primary key, 
-            $columnPath text not null,
             $columnAudioId text not null,
-            $columnText text not null, 
+            $columnStatus text not null,
+            $columnText text not null,
             $columnDuration integer not null
+            $columnPath text not null,
           )
        ''');
   }
