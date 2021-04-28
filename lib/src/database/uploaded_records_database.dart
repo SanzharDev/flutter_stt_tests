@@ -45,8 +45,8 @@ class UploadedRecordsDatabase {
             $columnAudioId text not null,
             $columnStatus text not null,
             $columnText text not null,
-            $columnDuration integer not null
-            $columnPath text not null,
+            $columnDuration integer not null,
+            $columnPath text not null
           )
        ''');
   }

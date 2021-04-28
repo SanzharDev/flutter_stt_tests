@@ -18,7 +18,7 @@ class UploadedRecord {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'audioId': audioId,
+      'audio_id': audioId,
       'status': status,
       'text': text,
       'duration': duration,

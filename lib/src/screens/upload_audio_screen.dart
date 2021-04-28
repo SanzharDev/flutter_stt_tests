@@ -18,13 +18,13 @@ class UploadAudioScreen extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    uploadProvider.pickFile(context);
+                    uploadProvider.pickFile();
                   },
                   child: Icon(Icons.file_upload),
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    uploadProvider.getTranscribedText(context);
+                    uploadProvider.checkProcessingRecords();
                   },
                   child: Icon(Icons.read_more),
                 ),
