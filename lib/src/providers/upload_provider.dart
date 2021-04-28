@@ -15,8 +15,7 @@ class UploadProvider extends ChangeNotifier {
 
   UploadProvider() {
     _initProcessingList();
-    // TODO: If there any audio_id in processing list, then request their results from server.
-    // TODO: Check: When new audio is uploaded to server, then
+    checkProcessingRecords();
   }
 
   Future<void> _initProcessingList() async {
