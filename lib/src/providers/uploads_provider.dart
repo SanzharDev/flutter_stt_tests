@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
@@ -15,8 +16,36 @@ class UploadProvider extends ChangeNotifier {
 
   UploadProvider() {
     _initProcessingList();
-    // TODO: If there any audio_id in processing list, then request their results from server.
-    // TODO: Check: When new audio is uploaded to server, then
+  }
+
+  Future<void> pickFile() async {
+    FilePickerResult result =
+        await FilePicker.platform.pickFiles(type: FileType.audio);
+    if (result != null) {
+      File file = File(result.files.single.path);
+      _sendAudio(
+          result.files.single.path, 'http://192.168.88.77:8008/long_audio/');
+      log('USER PICKED FILE: ${file.path}');
+    } else {
+      log('USER REFUSED TO PICK A FILE');
+    }
+  }
+
+  List<String> get processingList => UnmodifiableListView(_processingList);
+
+  bool get isLoading => _isLoading;
+
+  Future<void> _initStatusCheck() async {
+    log('Checking initialized');
+    return Timer.periodic(Duration(seconds: 100), _repeatingAction);
+  }
+
+  void _repeatingAction(Timer timer) {
+    _checkProcessingRecords();
+    if (_processingList.isEmpty) {
+      timer.cancel();
+      log('Checking canceled');
+    }
   }
 
   Future<void> _initProcessingList() async {
@@ -25,13 +54,10 @@ class UploadProvider extends ChangeNotifier {
     List<UploadedRecord> records = await uploadsService.recordsInProcess();
     _processingList.addAll(
         List.generate(records.length, (index) => records[index].audioId));
+    if (_processingList.isNotEmpty) _initStatusCheck();
   }
 
-  List<String> get processingList => UnmodifiableListView(_processingList);
-
-  bool get isLoading => _isLoading;
-
-  Future<void> checkProcessingRecords() async {
+  Future<void> _checkProcessingRecords() async {
     if (_processingList.isNotEmpty) {
       for (String audioId in _processingList) {
         log('Requesting result of transcribe audio_id = $audioId');
@@ -58,19 +84,6 @@ class UploadProvider extends ChangeNotifier {
         _onRecordTranscribeDone(audioId, result['text']);
     } else {
       log('Server responded with error. Status: ${response.statusCode}. Error message: ${response.body}');
-    }
-  }
-
-  Future<void> pickFile() async {
-    FilePickerResult result =
-        await FilePicker.platform.pickFiles(type: FileType.audio);
-    if (result != null) {
-      File file = File(result.files.single.path);
-      _sendAudio(
-          result.files.single.path, 'http://192.168.88.77:8008/long_audio/');
-      log('USER PICKED FILE: ${file.path}');
-    } else {
-      log('USER REFUSED TO PICK A FILE');
     }
   }
 
@@ -105,6 +118,7 @@ class UploadProvider extends ChangeNotifier {
       path: path,
     ));
     _processingList.add(audioId);
+    _initStatusCheck();
     log('Added new id{$audioId}');
   }
 
