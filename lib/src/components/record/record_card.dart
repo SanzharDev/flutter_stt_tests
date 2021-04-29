@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stt_flutter/src/components/record/record_card_dropdown_menu.dart';
 import 'package:stt_flutter/src/models/record.dart';
-import 'package:stt_flutter/src/providers/record_card_provider.dart';
+import 'package:stt_flutter/src/providers/record_cards_provider.dart';
 import 'package:stt_flutter/src/providers/records_provider.dart';
 import 'package:stt_flutter/src/utilities/constants.dart';
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stt_flutter/src/providers/upload_provider.dart';
+import 'package:stt_flutter/src/providers/uploads_provider.dart';
 import 'package:stt_flutter/src/screens/home_screen.dart';
 
 void main() {

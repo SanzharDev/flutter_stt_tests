@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stt_flutter/src/components/loader/loading.dart';
-import 'package:stt_flutter/src/providers/upload_provider.dart';
+import 'package:stt_flutter/src/providers/uploads_provider.dart';
 
 class UploadAudioScreen extends StatelessWidget {
   @override
@@ -21,12 +21,6 @@ class UploadAudioScreen extends StatelessWidget {
                     uploadProvider.pickFile();
                   },
                   child: Icon(Icons.file_upload),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    uploadProvider.checkProcessingRecords();
-                  },
-                  child: Icon(Icons.read_more),
                 ),
                 Expanded(
                     child: uploadProvider.isLoading
