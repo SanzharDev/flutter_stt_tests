@@ -30,7 +30,7 @@ class UploadsService {
     return List.generate(maps.length, (i) {
       return UploadedRecord(
         id: maps[i]['id'],
-        audioId: maps[i]['audioId'],
+        audioId: maps[i]['audio_id'],
         status: maps[i]['status'],
         text: maps[i]['text'],
         duration: maps[i]['duration'],
@@ -40,19 +40,19 @@ class UploadsService {
   }
 
   Future<List<UploadedRecord>> recordsInProcess() async {
-    final List<Map<String, dynamic>> maps = await _database.query('uploads');
-    final List<Map<String, dynamic>> processingRecords =
-        maps.where((e) => e['status'] == 'Processing').toList();
-    return List.generate(processingRecords.length, (i) {
-      return UploadedRecord(
-        id: processingRecords[i]['id'],
-        audioId: processingRecords[i]['audio_id'],
-        status: processingRecords[i]['status'],
-        text: processingRecords[i]['text'],
-        duration: processingRecords[i]['duration'],
-        path: processingRecords[i]['path'],
-      );
-    });
+    final List<UploadedRecord> uploadedRecords = await records();
+    final List<UploadedRecord> processingOrQueueRecords = uploadedRecords
+        .where((element) =>
+            element.status == 'Processing' || element.status == 'Queue')
+        .toList();
+    return processingOrQueueRecords;
+  }
+
+  Future<List<UploadedRecord>> recordsTranscribed() async {
+    final List<UploadedRecord> uploadedRecords = await records();
+    final List<UploadedRecord> transcribedRecords =
+        uploadedRecords.where((element) => element.status == 'Done').toList();
+    return transcribedRecords;
   }
 
   Future<void> updateByAudioId(

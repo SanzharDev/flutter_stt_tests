@@ -12,10 +12,13 @@ import 'package:stt_flutter/src/services/uploads_service.dart';
 
 class UploadProvider extends ChangeNotifier {
   final List<String> _processingList = [];
+  final List<UploadedRecord> _transcribedRecordsList = [];
+  bool _checkingIsInitialized = false;
   bool _isLoading = false;
 
   UploadProvider() {
     _initProcessingList();
+    _initTranscribedRecordsList();
   }
 
   Future<void> pickFile() async {
@@ -35,6 +38,17 @@ class UploadProvider extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
+  List<UploadedRecord> get transcribedRecords => _transcribedRecordsList;
+
+  Future<void> _initTranscribedRecordsList() async {
+    UploadsService uploadsService =
+        await UploadsService.instance.uploadsService;
+    if (_transcribedRecordsList.isNotEmpty) _transcribedRecordsList.clear();
+    _transcribedRecordsList.addAll(await uploadsService.recordsTranscribed());
+    log('Initialized transcribed records list ${_transcribedRecordsList.length}');
+    notifyListeners();
+  }
+
   Future<void> _initStatusCheck() async {
     log('Checking initialized');
     return Timer.periodic(Duration(seconds: 100), _repeatingAction);
@@ -45,6 +59,7 @@ class UploadProvider extends ChangeNotifier {
     if (_processingList.isEmpty) {
       timer.cancel();
       log('Checking canceled');
+      _checkingIsInitialized = false;
     }
   }
 
@@ -54,7 +69,10 @@ class UploadProvider extends ChangeNotifier {
     List<UploadedRecord> records = await uploadsService.recordsInProcess();
     _processingList.addAll(
         List.generate(records.length, (index) => records[index].audioId));
-    if (_processingList.isNotEmpty) _initStatusCheck();
+    if (_processingList.isNotEmpty) {
+      _initStatusCheck();
+      _checkingIsInitialized = true;
+    }
   }
 
   Future<void> _checkProcessingRecords() async {
@@ -112,13 +130,16 @@ class UploadProvider extends ChangeNotifier {
         await UploadsService.instance.uploadsService;
     await uploadsService.save(UploadedRecord(
       audioId: audioId,
+      title: '',
       text: '',
       status: 'Processing',
       duration: 1,
       path: path,
     ));
     _processingList.add(audioId);
-    _initStatusCheck();
+    if (!_checkingIsInitialized) {
+      _initStatusCheck();
+    }
     log('Added new id{$audioId}');
   }
 
@@ -128,6 +149,7 @@ class UploadProvider extends ChangeNotifier {
     uploadsService.updateByAudioId(audioId, text, 'Done').then((value) {
       _processingList.remove(audioId);
     });
+    _initTranscribedRecordsList();
   }
 
   void _startLoading() {

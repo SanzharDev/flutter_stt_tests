@@ -2,6 +2,7 @@ class UploadedRecord {
   final int id;
   final String audioId;
   final String status;
+  final String title;
   final String text;
   final int duration;
   final String path;
@@ -10,6 +11,7 @@ class UploadedRecord {
     this.id,
     this.audioId,
     this.status,
+    this.title,
     this.text,
     this.duration,
     this.path,
@@ -20,6 +22,7 @@ class UploadedRecord {
       'id': id,
       'audio_id': audioId,
       'status': status,
+      'title': title,
       'text': text,
       'duration': duration,
       'path': path,
@@ -28,7 +31,7 @@ class UploadedRecord {
 
   @override
   String toString() {
-    return 'UploadedRecord {id: $id, audioId: $audioId, status: $status, '
+    return 'UploadedRecord {id: $id, audioId: $audioId, status: $status, title: $title'
         'text: $text, duration: $duration, path: $path}';
   }
 
