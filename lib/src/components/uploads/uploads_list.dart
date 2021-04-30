@@ -11,6 +11,7 @@ class UploadsList extends StatelessWidget {
     return Consumer<UploadProvider>(builder: (context, uploadProvider, _) {
       final List<UploadedRecord> uploadedRecords =
           uploadProvider.transcribedRecords;
+      log('uploaded records: ${uploadedRecords.length}');
       return Container(
         child: ListView.builder(
           itemCount: uploadedRecords.length,
